@@ -120,7 +120,7 @@ resource "aws_api_gateway_integration" "checkouts_id" {
   uri                     = "https://api.github.com/users/FelipeFreitasGit/repos"
 }
 
-# /pedidos
+# /pedidos/checkout
 
 resource "aws_api_gateway_resource" "pedidos" {
   rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
@@ -151,6 +151,180 @@ resource "aws_api_gateway_integration" "checkout" {
   uri                     = "https://api.github.com/users/FelipeFreitasGit/repos"
 }
 
+#/pedidos
+
+resource "aws_api_gateway_method" "pedidos" {
+  rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
+  resource_id = aws_api_gateway_resource.pedidos.id
+  http_method = "GET"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.custom.id
+}
+
+resource "aws_api_gateway_integration" "pedidos" {
+  rest_api_id             = aws_api_gateway_rest_api.api_fast_food.id
+  resource_id             = aws_api_gateway_resource.pedidos.id
+  http_method             = aws_api_gateway_method.pedidos.http_method
+  integration_http_method = "GET"
+  type                    = "HTTP_PROXY"
+  uri                     = "https://api.github.com/users/FelipeFreitasGit/repos"
+}
+
+#/pedidos/{id}
+
+resource "aws_api_gateway_resource" "pedidos_id" {
+  rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
+  parent_id   = aws_api_gateway_resource.pedidos.id
+  path_part   = "{id+}"
+}
+
+resource "aws_api_gateway_method" "pedidos_id" {
+  rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
+  resource_id = aws_api_gateway_resource.pedidos_id.id
+  http_method = "GET"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.custom.id
+}
+
+resource "aws_api_gateway_integration" "pedidos_id" {
+  rest_api_id             = aws_api_gateway_rest_api.api_fast_food.id
+  resource_id             = aws_api_gateway_resource.pedidos_id.id
+  http_method             = aws_api_gateway_method.pedidos_id.http_method
+  integration_http_method = "GET"
+  type                    = "HTTP_PROXY"
+  uri                     = "https://api.github.com/users/FelipeFreitasGit/repos"
+}
+
+# /pedidos/status/{id}
+
+resource "aws_api_gateway_resource" "status" {
+  rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
+  parent_id   = aws_api_gateway_resource.pedidos.id
+  path_part   = "status"
+}
+
+resource "aws_api_gateway_resource" "status_id" {
+  rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
+  parent_id   = aws_api_gateway_resource.status.id
+  path_part   = "{id+}"
+}
+
+resource "aws_api_gateway_method" "status_id" {
+  rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
+  resource_id = aws_api_gateway_resource.status_id.id
+  http_method = "GET"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.custom.id
+}
+
+resource "aws_api_gateway_integration" "status_id" {
+  rest_api_id             = aws_api_gateway_rest_api.api_fast_food.id
+  resource_id             = aws_api_gateway_resource.status_id.id
+  http_method             = aws_api_gateway_method.status_id.http_method
+  integration_http_method = "GET"
+  type                    = "HTTP_PROXY"
+  uri                     = "https://api.github.com/users/FelipeFreitasGit/repos"
+}
+
+# pedidos/mudar-status/preparacao/{id}
+
+resource "aws_api_gateway_resource" "mudar_status" {
+  rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
+  parent_id   = aws_api_gateway_resource.pedidos.id
+  path_part   = "mudar-status"
+}
+
+resource "aws_api_gateway_resource" "preparacao" {
+  rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
+  parent_id   = aws_api_gateway_resource.mudar_status.id
+  path_part   = "preparacao"
+}
+
+resource "aws_api_gateway_resource" "preparacao_id" {
+  rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
+  parent_id   = aws_api_gateway_resource.preparacao.id
+  path_part   = "{id+}"
+}
+
+resource "aws_api_gateway_method" "preparacao_id" {
+  rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
+  resource_id = aws_api_gateway_resource.preparacao_id.id
+  http_method = "PUT"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.custom.id
+}
+
+resource "aws_api_gateway_integration" "preparacao_id" {
+  rest_api_id             = aws_api_gateway_rest_api.api_fast_food.id
+  resource_id             = aws_api_gateway_resource.preparacao_id.id
+  http_method             = aws_api_gateway_method.preparacao_id.http_method
+  integration_http_method = "PUT"
+  type                    = "HTTP_PROXY"
+  uri                     = "https://api.github.com/users/FelipeFreitasGit/repos"
+}
+
+# pedidos/mudar-status/pronto/{id}
+
+resource "aws_api_gateway_resource" "pronto" {
+  rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
+  parent_id   = aws_api_gateway_resource.mudar_status.id
+  path_part   = "pronto"
+}
+
+resource "aws_api_gateway_resource" "pronto_id" {
+  rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
+  parent_id   = aws_api_gateway_resource.pronto.id
+  path_part   = "{id+}"
+}
+
+resource "aws_api_gateway_method" "pronto_id" {
+  rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
+  resource_id = aws_api_gateway_resource.pronto_id.id
+  http_method = "PUT"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.custom.id
+}
+
+resource "aws_api_gateway_integration" "pronto_id" {
+  rest_api_id             = aws_api_gateway_rest_api.api_fast_food.id
+  resource_id             = aws_api_gateway_resource.pronto_id.id
+  http_method             = aws_api_gateway_method.pronto_id.http_method
+  integration_http_method = "PUT"
+  type                    = "HTTP_PROXY"
+  uri                     = "https://api.github.com/users/FelipeFreitasGit/repos"
+}
+
+# pedidos/mudar-status/confirmar-entrega/{id}
+
+resource "aws_api_gateway_resource" "confirmar_entrega" {
+  rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
+  parent_id   = aws_api_gateway_resource.mudar_status.id
+  path_part   = "confirmar-entrega"
+}
+
+resource "aws_api_gateway_resource" "confirmar_entrega_id" {
+  rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
+  parent_id   = aws_api_gateway_resource.confirmar_entrega.id
+  path_part   = "{id+}"
+}
+
+resource "aws_api_gateway_method" "confirmar_entrega_id" {
+  rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
+  resource_id = aws_api_gateway_resource.confirmar_entrega_id.id
+  http_method = "PUT"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.custom.id
+}
+
+resource "aws_api_gateway_integration" "confirmar_entrega_id" {
+  rest_api_id             = aws_api_gateway_rest_api.api_fast_food.id
+  resource_id             = aws_api_gateway_resource.confirmar_entrega_id.id
+  http_method             = aws_api_gateway_method.confirmar_entrega_id.http_method
+  integration_http_method = "PUT"
+  type                    = "HTTP_PROXY"
+  uri                     = "https://api.github.com/users/FelipeFreitasGit/repos"
+}
+
 resource "aws_api_gateway_deployment" "api_fast_food_deployment" {
   depends_on = [
     aws_api_gateway_method.cadastrar_cliente,
@@ -167,6 +341,24 @@ resource "aws_api_gateway_deployment" "api_fast_food_deployment" {
 
     aws_api_gateway_method.checkout,
     aws_api_gateway_integration.checkout,
+
+    aws_api_gateway_method.pedidos,
+    aws_api_gateway_integration.pedidos,
+
+    aws_api_gateway_method.pedidos_id,
+    aws_api_gateway_integration.pedidos_id,
+
+    aws_api_gateway_method.status_id,
+    aws_api_gateway_integration.status_id,
+
+    aws_api_gateway_method.preparacao_id,
+    aws_api_gateway_integration.preparacao_id,
+
+    aws_api_gateway_method.pronto_id,
+    aws_api_gateway_integration.pronto_id,
+
+    aws_api_gateway_method.confirmar_entrega_id,
+    aws_api_gateway_integration.confirmar_entrega_id,
     ]
   rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
   stage_name = "dev"
