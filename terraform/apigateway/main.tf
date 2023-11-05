@@ -325,6 +325,104 @@ resource "aws_api_gateway_integration" "confirmar_entrega_id" {
   uri                     = "https://api.github.com/users/FelipeFreitasGit/repos"
 }
 
+# /produto
+
+resource "aws_api_gateway_resource" "produto" {
+  rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
+  parent_id   = aws_api_gateway_rest_api.api_fast_food.root_resource_id
+  path_part   = "produto"
+}
+
+resource "aws_api_gateway_method" "produto" {
+  rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
+  resource_id = aws_api_gateway_resource.produto.id
+  http_method = "POST"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.custom.id
+}
+
+resource "aws_api_gateway_integration" "produto" {
+  rest_api_id             = aws_api_gateway_rest_api.api_fast_food.id
+  resource_id             = aws_api_gateway_resource.produto.id
+  http_method             = aws_api_gateway_method.produto.http_method
+  integration_http_method = "POST"
+  type                    = "HTTP_PROXY"
+  uri                     = "https://api.github.com/users/FelipeFreitasGit/repos"
+}
+
+# /produto/{id}
+
+resource "aws_api_gateway_resource" "produto_id" {
+  rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
+  parent_id   = aws_api_gateway_resource.produto.id
+  path_part   = "{id+}"
+}
+
+resource "aws_api_gateway_method" "produto_id" {
+  rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
+  resource_id = aws_api_gateway_resource.produto_id.id
+  http_method = "PUT"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.custom.id
+}
+
+resource "aws_api_gateway_integration" "produto_id" {
+  rest_api_id             = aws_api_gateway_rest_api.api_fast_food.id
+  resource_id             = aws_api_gateway_resource.produto_id.id
+  http_method             = aws_api_gateway_method.produto_id.http_method
+  integration_http_method = "PUT"
+  type                    = "HTTP_PROXY"
+  uri                     = "https://api.github.com/users/FelipeFreitasGit/repos"
+}
+
+resource "aws_api_gateway_resource" "deleta_produto_id" {
+  rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
+  parent_id   = aws_api_gateway_resource.produto.id
+  path_part   = "{id+}"
+}
+
+resource "aws_api_gateway_method" "deleta_produto_id" {
+  rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
+  resource_id = aws_api_gateway_resource.deleta_produto_id.id
+  http_method = "DELETE"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.custom.id
+}
+
+resource "aws_api_gateway_integration" "deleta_produto_id" {
+  rest_api_id             = aws_api_gateway_rest_api.api_fast_food.id
+  resource_id             = aws_api_gateway_resource.deleta_produto_id.id
+  http_method             = aws_api_gateway_method.deleta_produto_id.http_method
+  integration_http_method = "DELETE"
+  type                    = "HTTP_PROXY"
+  uri                     = "https://api.github.com/users/FelipeFreitasGit/repos"
+}
+
+# /produto/categoria
+
+resource "aws_api_gateway_resource" "categoria" {
+  rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
+  parent_id   = aws_api_gateway_resource.produto.id
+  path_part   = "categoria"
+}
+
+resource "aws_api_gateway_method" "categoria" {
+  rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
+  resource_id = aws_api_gateway_resource.categoria.id
+  http_method = "GET"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.custom.id
+}
+
+resource "aws_api_gateway_integration" "categoria" {
+  rest_api_id             = aws_api_gateway_rest_api.api_fast_food.id
+  resource_id             = aws_api_gateway_resource.categoria.id
+  http_method             = aws_api_gateway_method.categoria.http_method
+  integration_http_method = "GET"
+  type                    = "HTTP_PROXY"
+  uri                     = "https://api.github.com/users/FelipeFreitasGit/repos"
+}
+
 resource "aws_api_gateway_deployment" "api_fast_food_deployment" {
   depends_on = [
     aws_api_gateway_method.cadastrar_cliente,
@@ -359,6 +457,18 @@ resource "aws_api_gateway_deployment" "api_fast_food_deployment" {
 
     aws_api_gateway_method.confirmar_entrega_id,
     aws_api_gateway_integration.confirmar_entrega_id,
+
+    aws_api_gateway_method.produto,
+    aws_api_gateway_integration.produto,
+
+    aws_api_gateway_method.produto_id,
+    aws_api_gateway_integration.produto_id,
+
+    aws_api_gateway_method.deleta_produto_id,
+    aws_api_gateway_integration.deleta_produto_id,
+
+    aws_api_gateway_method.categoria,
+    aws_api_gateway_integration.categoria,
     ]
   rest_api_id = aws_api_gateway_rest_api.api_fast_food.id
   stage_name = "dev"
